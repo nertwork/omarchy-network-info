@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "id": "nertwork.network-info",
+  "name": "Network Info",
+  "version": "1.0.0",
+  "author": "nertwork",
+  "license": "MIT",
+  "repository": "https://github.com/nertwork/omarchy-network-info",
+  "omarchyVersion": ">=4.0.0",
+  "description": "Primary & public IP telemetry, live interface up/down speeds, compact & stacked bar modes, interactive throughput graph, gateway ping, DNS, VPNs, and per-app bandwidth.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "activation": "on-demand",
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Network Info",
+    "description": "Primary & public IP telemetry, live interface up/down speeds, compact & stacked bar modes, interactive throughput graph, gateway ping, DNS, VPNs, and per-app bandwidth",
+    "category": "Widgets",
+    "aliases": [
+      "network-info",
+      "ip",
+      "ip-info",
+      "ipinfo",
+      "public-ip",
+      "netspeed",
+      "speed",
+      "bandwidth"
+    ],
+    "defaultSection": "left",
+    "allowMultiple": false,
+    "defaults": {
+      "displayMode": "both",
+      "barSpeedMode": "compact",
+      "hideSpeedWhenIdle": false,
+      "interfaceScope": "primary",
+      "showGraph": true,
+      "showPerApp": true,
+      "chartWindow": 300,
+      "speedInterval": 2000
+    },
+    "schema": [
+      {
+        "key": "displayMode",
+        "type": "enum",
+        "label": "Bar Display Mode",
+        "options": [
+          "both",
+          "private",
+          "public",
+          "speed",
+          "icon"
+        ],
+        "defaultValue": "both",
+        "description": "Information displayed on the status bar: both (private and public IP), private (primary interface IP), public (external IP), speed (network icon + live speeds), or icon (network icon only)."
+      },
+      {
+        "key": "barSpeedMode",
+        "type": "enum",
+        "label": "Bar Speed Mode",
+        "options": [
+          "off",
+          "compact",
+          "stacked",
+          "active",
+          "full"
+        ],
+        "defaultValue": "compact",
+        "description": "How live download/upload speeds are rendered on the bar: off, compact (single-line ↓768K ↑42K), stacked (two-line vertical ↓/↑ stack), active (dominant direction only), or full (↓ 768.0 KiB/s ↑ 42.0 KiB/s)."
+      },
+      {
+        "key": "hideSpeedWhenIdle",
+        "type": "boolean",
+        "label": "Hide Speed When Idle",
+        "defaultValue": false,
+        "description": "Hide bar speed telemetry when both download and upload speeds are below 1 KiB/s."
+      },
+      {
+        "key": "interfaceScope",
+        "type": "enum",
+        "label": "Throughput Interface Scope",
+        "options": [
+          "primary",
+          "all"
+        ],
+        "defaultValue": "primary",
+        "description": "Measure throughput on the primary routed interface only or aggregate across all non-virtual interfaces."
+      },
+      {
+        "key": "showGraph",
+        "type": "boolean",
+        "label": "Show Throughput Graph",
+        "defaultValue": true,
+        "description": "Display the mirrored live download/upload throughput history chart in the popover panel."
+      },
+      {
+        "key": "showPerApp",
+        "type": "boolean",
+        "label": "Show Per-App Activity",
+        "defaultValue": true,
+        "description": "Display top active processes with established TCP socket bandwidth in the popover panel."
+      },
+      {
+        "key": "chartWindow",
+        "type": "enum",
+        "label": "Throughput Graph Window (seconds)",
+        "options": [
+          60,
+          300,
+          900,
+          1800
+        ],
+        "defaultValue": 300,
+        "description": "Time window in seconds for the live throughput graph (60 = 1m, 300 = 5m, 900 = 15m, 1800 = 30m)."
+      },
+      {
+        "key": "speedInterval",
+        "type": "integer",
+        "label": "Speed Poll Interval (ms)",
+        "min": 1000,
+        "max": 10000,
+        "step": 500,
+        "defaultValue": 2000,
+        "description": "Sampling interval in milliseconds for /proc/net/dev throughput calculation."
+      }
+    ]
+  }
+}

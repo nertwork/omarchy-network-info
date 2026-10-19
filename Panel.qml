@@ -282,7 +282,7 @@ Panel {
 
   Timer {
     id: copiedTimer
-    interval: 2200
+    interval: 1800
     repeat: false
     onTriggered: {
       root.copiedValue = ""
@@ -1174,20 +1174,94 @@ Panel {
                   width: parent.width
                 }
 
-                Text {
-                  textFormat: Text.PlainText
-                  text: {
-                    var m = []
-                    if (root.netmask) m.push("Mask " + root.netmask)
-                    if (root.macAddress) m.push("MAC " + root.macAddress)
-                    if (root.primaryIpv6) m.push("IPv6 " + root.primaryIpv6)
-                    return m.join(" \u00b7 ")
+                Row {
+                  visible: root.netmask !== "" || root.macAddress !== ""
+                  spacing: Style.space(6)
+
+                  Text {
+                    visible: root.netmask !== ""
+                    textFormat: Text.PlainText
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "Mask " + root.netmask + (root.macAddress !== "" ? " \u00b7" : "")
+                    color: root.subDimColor
+                    font.family: root.contentFontFamily
+                    font.pixelSize: Style.font.caption
                   }
-                  color: root.subDimColor
-                  font.family: root.contentFontFamily
-                  font.pixelSize: Style.font.caption
-                  elide: Text.ElideRight
-                  width: parent.width
+
+                  Item {
+                    visible: root.macAddress !== ""
+                    width: macRow.implicitWidth
+                    height: macRow.implicitHeight
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    Row {
+                      id: macRow
+                      spacing: Style.space(4)
+
+                      Text {
+                        textFormat: Text.PlainText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "MAC " + root.macAddress
+                        color: macMouse.containsMouse ? root.contentForeground : root.subDimColor
+                        font.family: root.contentFontFamily
+                        font.pixelSize: Style.font.caption
+                      }
+
+                      Text {
+                        textFormat: Text.PlainText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: (root.copiedValue !== "" && (root.copiedValue === root.macAddress || root.copiedLabel === "MAC")) ? Model.checkIcon : Model.copyIcon
+                        color: (root.copiedValue !== "" && (root.copiedValue === root.macAddress || root.copiedLabel === "MAC")) ? Color.accent : (macMouse.containsMouse ? Color.accent : root.dimColor)
+                        font.family: root.contentFontFamily
+                        font.pixelSize: Style.font.caption
+                      }
+                    }
+
+                    MouseArea {
+                      id: macMouse
+                      anchors.fill: parent
+                      hoverEnabled: true
+                      cursorShape: Qt.PointingHandCursor
+                      onClicked: root.copyToClipboard(root.macAddress, "MAC")
+                    }
+                  }
+                }
+
+                Item {
+                  visible: root.primaryIpv6 !== ""
+                  width: ipv6Row.implicitWidth
+                  height: ipv6Row.implicitHeight
+
+                  Row {
+                    id: ipv6Row
+                    spacing: Style.space(4)
+
+                    Text {
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: "IPv6 " + root.primaryIpv6 + (root.primaryIpv6Prefix ? "/" + root.primaryIpv6Prefix : "")
+                      color: ipv6Mouse.containsMouse ? root.contentForeground : root.subDimColor
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                    }
+
+                    Text {
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: (root.copiedValue !== "" && (root.copiedValue === root.primaryIpv6 || root.copiedLabel === "IPv6")) ? Model.checkIcon : Model.copyIcon
+                      color: (root.copiedValue !== "" && (root.copiedValue === root.primaryIpv6 || root.copiedLabel === "IPv6")) ? Color.accent : (ipv6Mouse.containsMouse ? Color.accent : root.dimColor)
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                    }
+                  }
+
+                  MouseArea {
+                    id: ipv6Mouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.copyToClipboard(root.primaryIpv6, "IPv6")
+                  }
                 }
               }
 
@@ -1195,7 +1269,8 @@ Panel {
                 id: privCopyBtn
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                iconText: root.copiedValue === root.privateIp ? Model.checkIcon : Model.copyIcon
+                iconText: (root.copiedValue !== "" && (root.copiedValue === root.privateIp || root.copiedLabel === "Private IP")) ? Model.checkIcon : Model.copyIcon
+                foreground: (root.copiedValue !== "" && (root.copiedValue === root.privateIp || root.copiedLabel === "Private IP")) ? Color.accent : root.contentForeground
                 tooltipText: "Copy Private IP (1)"
                 hoverColor: Color.accent
                 onClicked: root.copyToClipboard(root.privateIp, "Private IP")
@@ -1285,7 +1360,8 @@ Panel {
                 id: pubCopyBtn
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                iconText: root.copiedValue === root.publicIp ? Model.checkIcon : Model.copyIcon
+                iconText: (root.copiedValue !== "" && (root.copiedValue === root.publicIp || root.copiedLabel === "Public IP")) ? Model.checkIcon : Model.copyIcon
+                foreground: (root.copiedValue !== "" && (root.copiedValue === root.publicIp || root.copiedLabel === "Public IP")) ? Color.accent : root.contentForeground
                 tooltipText: "Copy Public IP (2)"
                 hoverColor: Color.accent
                 onClicked: root.copyToClipboard(root.publicIp, "Public IP")
@@ -1316,24 +1392,49 @@ Panel {
 
                 Text {
                   textFormat: Text.PlainText
+                  anchors.verticalCenter: parent.verticalCenter
                   text: Model.gatewayIcon + " Gateway:"
                   color: root.dimColor
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.caption
                 }
 
-                Text {
-                  textFormat: Text.PlainText
-                  text: (root.gatewayIp || "N/A") + (root.gatewayPing ? (" (" + Model.formatPing(Number(root.gatewayPing)) + ")") : "")
-                  color: root.contentForeground
-                  font.family: root.contentFontFamily
-                  font.pixelSize: Style.font.caption
-                  font.bold: true
+                Item {
+                  width: gwValRow.implicitWidth
+                  height: gwValRow.implicitHeight
+                  anchors.verticalCenter: parent.verticalCenter
+
+                  Row {
+                    id: gwValRow
+                    spacing: Style.space(5)
+
+                    Text {
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: (root.gatewayIp || "N/A") + (root.gatewayPing ? (" (" + Model.formatPing(Number(root.gatewayPing)) + ")") : "")
+                      color: gwMouse.containsMouse ? Color.accent : root.contentForeground
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                      font.bold: true
+                    }
+
+                    Text {
+                      visible: root.gatewayIp !== ""
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: (root.copiedValue !== "" && (root.copiedValue === root.gatewayIp || root.copiedLabel === "Gateway")) ? Model.checkIcon : Model.copyIcon
+                      color: (root.copiedValue !== "" && (root.copiedValue === root.gatewayIp || root.copiedLabel === "Gateway")) ? Color.accent : (gwMouse.containsMouse ? Color.accent : root.dimColor)
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                    }
+                  }
 
                   MouseArea {
+                    id: gwMouse
                     anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: root.copyToClipboard(root.gatewayIp, "Gateway")
+                    hoverEnabled: true
+                    cursorShape: root.gatewayIp !== "" ? Qt.PointingHandCursor : Qt.ArrowCursor
+                    onClicked: if (root.gatewayIp) root.copyToClipboard(root.gatewayIp, "Gateway")
                   }
                 }
               }
@@ -1356,23 +1457,43 @@ Panel {
                   model: root.dnsServers
                   delegate: Rectangle {
                     required property string modelData
+                    readonly property bool isDnsCopied: root.copiedValue !== "" && (root.copiedValue === modelData || root.copiedLabel === ("DNS " + modelData))
                     height: Style.space(18)
-                    width: dnsItemTxt.implicitWidth + Style.space(10)
+                    width: dnsPillRow.implicitWidth + Style.space(10)
                     radius: Style.space(3)
-                    color: Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.08)
+                    color: dnsMouse.containsMouse
+                      ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.14)
+                      : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.08)
 
-                    Text {
-                      id: dnsItemTxt
-                      textFormat: Text.PlainText
+                    Row {
+                      id: dnsPillRow
                       anchors.centerIn: parent
-                      text: modelData
-                      color: root.contentForeground
-                      font.family: root.contentFontFamily
-                      font.pixelSize: Style.font.caption
+                      spacing: Style.space(4)
+
+                      Text {
+                        id: dnsItemTxt
+                        textFormat: Text.PlainText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: modelData
+                        color: root.contentForeground
+                        font.family: root.contentFontFamily
+                        font.pixelSize: Style.font.caption
+                      }
+
+                      Text {
+                        textFormat: Text.PlainText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: isDnsCopied ? Model.checkIcon : Model.copyIcon
+                        color: isDnsCopied ? Color.accent : (dnsMouse.containsMouse ? Color.accent : root.dimColor)
+                        font.family: root.contentFontFamily
+                        font.pixelSize: Style.font.caption
+                      }
                     }
 
                     MouseArea {
+                      id: dnsMouse
                       anchors.fill: parent
+                      hoverEnabled: true
                       cursorShape: Qt.PointingHandCursor
                       onClicked: root.copyToClipboard(modelData, "DNS " + modelData)
                     }
@@ -1399,10 +1520,13 @@ Panel {
               delegate: Rectangle {
                 required property var modelData
                 readonly property var ifRate: root.ifaceRates && root.ifaceRates[modelData.iface] ? root.ifaceRates[modelData.iface] : ({ down: 0, up: 0 })
+                readonly property bool isIfCopied: root.copiedValue !== "" && (root.copiedValue === modelData.ip || root.copiedLabel === (modelData.iface + " IP"))
                 width: contentCol.width
                 height: Style.space(26)
                 radius: Style.space(4)
-                color: Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.04)
+                color: addIfMouse.containsMouse
+                  ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.10)
+                  : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.04)
 
                 Item {
                   anchors.fill: parent
@@ -1419,22 +1543,36 @@ Panel {
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.bold: true
-                    width: Style.space(110)
+                    width: Style.space(96)
                     elide: Text.ElideRight
                   }
 
-                  Text {
-                    textFormat: Text.PlainText
+                  Row {
                     anchors.left: addIfName.right
                     anchors.leftMargin: Style.space(8)
                     anchors.right: addIfSpeed.left
                     anchors.rightMargin: Style.space(8)
                     anchors.verticalCenter: parent.verticalCenter
-                    text: modelData.ip + (modelData.prefix ? "/" + modelData.prefix : "")
-                    color: root.contentForeground
-                    font.family: root.contentFontFamily
-                    font.pixelSize: Style.font.caption
-                    elide: Text.ElideRight
+                    spacing: Style.space(5)
+
+                    Text {
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: modelData.ip + (modelData.prefix ? "/" + modelData.prefix : "")
+                      color: root.contentForeground
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                      elide: Text.ElideRight
+                    }
+
+                    Text {
+                      textFormat: Text.PlainText
+                      anchors.verticalCenter: parent.verticalCenter
+                      text: isIfCopied ? Model.checkIcon : Model.copyIcon
+                      color: isIfCopied ? Color.accent : (addIfMouse.containsMouse ? Color.accent : root.dimColor)
+                      font.family: root.contentFontFamily
+                      font.pixelSize: Style.font.caption
+                    }
                   }
 
                   Text {
@@ -1450,7 +1588,9 @@ Panel {
                 }
 
                 MouseArea {
+                  id: addIfMouse
                   anchors.fill: parent
+                  hoverEnabled: true
                   cursorShape: Qt.PointingHandCursor
                   onClicked: root.copyToClipboard(modelData.ip, modelData.iface + " IP")
                 }

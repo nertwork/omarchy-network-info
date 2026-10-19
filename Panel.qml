@@ -395,6 +395,7 @@ Panel {
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
+        if (!text || text.length > 65536) return
         try {
           var parsed = JSON.parse(text)
           var prevIp = root.privateIp
@@ -410,17 +411,44 @@ Panel {
     }
   }
 
+  Timer {
+    id: localProcWatchdog
+    interval: 8000
+    running: localProc.running
+    repeat: false
+    onTriggered: {
+      if (localProc.running) {
+        console.warn("nertwork.network-info: localProc watchdog timeout, terminating process")
+        localProc.running = false
+      }
+    }
+  }
+
   Process {
     id: publicProc
     command: ["python3", root.scriptPath, "--public-cached"]
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
+        if (!text || text.length > 65536) return
         try {
           root.publicData = JSON.parse(text)
         } catch (e) {
           console.warn("nertwork.network-info: error parsing public data: " + e)
         }
+      }
+    }
+  }
+
+  Timer {
+    id: publicProcWatchdog
+    interval: 10000
+    running: publicProc.running
+    repeat: false
+    onTriggered: {
+      if (publicProc.running) {
+        console.warn("nertwork.network-info: publicProc watchdog timeout, terminating process")
+        publicProc.running = false
       }
     }
   }
@@ -431,11 +459,25 @@ Panel {
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
+        if (!text || text.length > 65536) return
         try {
           root.publicData = JSON.parse(text)
         } catch (e) {
           console.warn("nertwork.network-info: error parsing force public data: " + e)
         }
+      }
+    }
+  }
+
+  Timer {
+    id: publicForceProcWatchdog
+    interval: 10000
+    running: publicForceProc.running
+    repeat: false
+    onTriggered: {
+      if (publicForceProc.running) {
+        console.warn("nertwork.network-info: publicForceProc watchdog timeout, terminating process")
+        publicForceProc.running = false
       }
     }
   }
@@ -446,8 +488,21 @@ Panel {
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
+        if (!text || text.length > 65536) return
         var sample = Model.parseDev(text, root.interfaceScope, root.primaryIface)
         root.applyDevSample(sample)
+      }
+    }
+  }
+
+  Timer {
+    id: devProcWatchdog
+    interval: 4000
+    running: devProc.running
+    repeat: false
+    onTriggered: {
+      if (devProc.running) {
+        devProc.running = false
       }
     }
   }
@@ -458,7 +513,20 @@ Panel {
     stdout: StdioCollector {
       waitForEnd: true
       onStreamFinished: {
+        if (!text || text.length > 65536) return
         root.appRows = Model.parseSS(text)
+      }
+    }
+  }
+
+  Timer {
+    id: ssProcWatchdog
+    interval: 5000
+    running: ssProc.running
+    repeat: false
+    onTriggered: {
+      if (ssProc.running) {
+        ssProc.running = false
       }
     }
   }

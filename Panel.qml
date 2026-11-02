@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -204,7 +205,7 @@ Panel {
   property string copiedValue: ""
   property string copiedLabel: ""
 
-  readonly property color contentForeground: bar ? bar.foreground : Color.foreground
+  readonly property color contentForeground: bar ? bar.foreground : Commons.Color.foreground
   readonly property string contentFontFamily: bar ? bar.fontFamily : Style.font.family
   readonly property color dimColor: Qt.darker(contentForeground, 1.35)
   readonly property color subDimColor: Qt.darker(contentForeground, 1.65)
@@ -621,7 +622,7 @@ Panel {
         Text {
           textFormat: Text.PlainText
           text: "\u2193" + Model.formatSpeedCompact(root.smoothDown).compact
-          color: root.smoothDown >= 1024 ? Color.accent : button.foreground
+          color: root.smoothDown >= 1024 ? Commons.Color.accent : button.foreground
           font.family: button.fontFamily
           font.pixelSize: Math.max(9, Math.round(button.fontSize * 0.68))
           font.bold: true
@@ -631,7 +632,7 @@ Panel {
         Text {
           textFormat: Text.PlainText
           text: "\u2191" + Model.formatSpeedCompact(root.smoothUp).compact
-          color: root.smoothUp >= 1024 ? Color.accent : Qt.darker(button.foreground, 1.25)
+          color: root.smoothUp >= 1024 ? Commons.Color.accent : Qt.darker(button.foreground, 1.25)
           font.family: button.fontFamily
           font.pixelSize: Math.max(9, Math.round(button.fontSize * 0.68))
           renderType: Text.NativeRendering
@@ -701,7 +702,7 @@ Panel {
               text: Model.typeIcon(root.connected ? root.primaryType : "disconnected")
               font.family: root.contentFontFamily
               font.pixelSize: Style.font.heading
-              color: root.connected ? Color.accent : Color.urgent
+              color: root.connected ? Commons.Color.accent : Commons.Color.urgent
               anchors.left: parent.left
               anchors.verticalCenter: parent.verticalCenter
             }
@@ -732,7 +733,7 @@ Panel {
                   height: Style.space(16)
                   width: badgeTxt.implicitWidth + Style.space(10)
                   radius: Style.space(3)
-                  color: Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.16)
+                  color: Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.16)
                   anchors.verticalCenter: parent.verticalCenter
 
                   Text {
@@ -740,7 +741,7 @@ Panel {
                     textFormat: Text.PlainText
                     anchors.centerIn: parent
                     text: root.wifiSsid ? (root.wifiSsid + (root.wifiSignal ? " " + root.wifiSignal + "%" : "")) : root.linkSpeed
-                    color: Color.accent
+                    color: Commons.Color.accent
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.bold: true
@@ -770,7 +771,7 @@ Panel {
               anchors.verticalCenter: parent.verticalCenter
               iconText: Model.refreshIcon
               tooltipText: "Refresh Network & Public IP (r)"
-              hoverColor: Color.accent
+              hoverColor: Commons.Color.accent
               onClicked: root.refreshAll(true)
             }
           }
@@ -801,12 +802,12 @@ Panel {
                   height: Style.space(22)
                   radius: Style.space(4)
                   color: isSelected
-                    ? Color.accent
+                    ? Commons.Color.accent
                     : (dmMouse.containsMouse
                       ? Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.12)
                       : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.05))
                   border.width: 1
-                  border.color: isSelected ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
+                  border.color: isSelected ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
 
                   Text {
                     textFormat: Text.PlainText
@@ -815,7 +816,7 @@ Panel {
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.bold: isSelected
-                    color: isSelected ? (bar ? bar.background : Color.background) : root.contentForeground
+                    color: isSelected ? (bar ? bar.background : Commons.Color.background) : root.contentForeground
                   }
 
                   MouseArea {
@@ -848,12 +849,12 @@ Panel {
                   height: Style.space(22)
                   radius: Style.space(4)
                   color: isSelected
-                    ? Color.accent
+                    ? Commons.Color.accent
                     : (smMouse.containsMouse
                       ? Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.12)
                       : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.05))
                   border.width: 1
-                  border.color: isSelected ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
+                  border.color: isSelected ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
 
                   Text {
                     textFormat: Text.PlainText
@@ -862,7 +863,7 @@ Panel {
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.bold: isSelected
-                    color: isSelected ? (bar ? bar.background : Color.background) : root.contentForeground
+                    color: isSelected ? (bar ? bar.background : Commons.Color.background) : root.contentForeground
                   }
 
                   MouseArea {
@@ -893,10 +894,10 @@ Panel {
                   height: Style.space(20)
                   radius: Style.space(4)
                   color: modelData.active
-                    ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.18)
+                    ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.18)
                     : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.04)
                   border.width: 1
-                  border.color: modelData.active ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
+                  border.color: modelData.active ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
 
                   Text {
                     textFormat: Text.PlainText
@@ -904,7 +905,7 @@ Panel {
                     text: modelData.label
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
-                    color: modelData.active ? Color.accent : root.dimColor
+                    color: modelData.active ? Commons.Color.accent : root.dimColor
                   }
 
                   MouseArea {
@@ -953,7 +954,7 @@ Panel {
                   Text {
                     textFormat: Text.PlainText
                     text: "\u2193 DOWNLOAD"
-                    color: Color.accent
+                    color: Commons.Color.accent
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.bold: true
@@ -1051,7 +1052,7 @@ Panel {
                         width: Style.space(28)
                         height: Style.space(16)
                         radius: Style.space(3)
-                        color: activeWin ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.08)
+                        color: activeWin ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.08)
 
                         Text {
                           textFormat: Text.PlainText
@@ -1060,7 +1061,7 @@ Panel {
                           font.family: root.contentFontFamily
                           font.pixelSize: Style.font.caption
                           font.bold: activeWin
-                          color: activeWin ? (bar ? bar.background : Color.background) : root.dimColor
+                          color: activeWin ? (bar ? bar.background : Commons.Color.background) : root.dimColor
                         }
 
                         MouseArea {
@@ -1158,7 +1159,7 @@ Panel {
                       ctx.stroke()
                     }
 
-                    drawSeries("down", true, Color.accent)
+                    drawSeries("down", true, Commons.Color.accent)
                     drawSeries("up", false, root.dimColor)
 
                     if (flowCanvas.hoverX >= 0) {
@@ -1192,10 +1193,10 @@ Panel {
             implicitHeight: privTextCol.implicitHeight + Style.space(18)
             radius: Style.cornerRadius
             color: privMouse.containsMouse
-              ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.12)
+              ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.12)
               : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.05)
             border.width: 1
-            border.color: privMouse.containsMouse ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
+            border.color: privMouse.containsMouse ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
 
             MouseArea {
               id: privMouse
@@ -1217,7 +1218,7 @@ Panel {
                 text: Model.typeIcon(root.primaryType)
                 font.family: root.contentFontFamily
                 font.pixelSize: Style.font.title
-                color: Color.accent
+                color: Commons.Color.accent
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
               }
@@ -1279,7 +1280,7 @@ Panel {
                         textFormat: Text.PlainText
                         anchors.verticalCenter: parent.verticalCenter
                         text: (root.copiedValue !== "" && (root.copiedValue === root.macAddress || root.copiedLabel === "MAC")) ? Model.checkIcon : Model.copyIcon
-                        color: (root.copiedValue !== "" && (root.copiedValue === root.macAddress || root.copiedLabel === "MAC")) ? Color.accent : (macMouse.containsMouse ? Color.accent : root.dimColor)
+                        color: (root.copiedValue !== "" && (root.copiedValue === root.macAddress || root.copiedLabel === "MAC")) ? Commons.Color.accent : (macMouse.containsMouse ? Commons.Color.accent : root.dimColor)
                         font.family: root.contentFontFamily
                         font.pixelSize: Style.font.caption
                       }
@@ -1317,7 +1318,7 @@ Panel {
                       textFormat: Text.PlainText
                       anchors.verticalCenter: parent.verticalCenter
                       text: (root.copiedValue !== "" && (root.copiedValue === root.primaryIpv6 || root.copiedLabel === "IPv6")) ? Model.checkIcon : Model.copyIcon
-                      color: (root.copiedValue !== "" && (root.copiedValue === root.primaryIpv6 || root.copiedLabel === "IPv6")) ? Color.accent : (ipv6Mouse.containsMouse ? Color.accent : root.dimColor)
+                      color: (root.copiedValue !== "" && (root.copiedValue === root.primaryIpv6 || root.copiedLabel === "IPv6")) ? Commons.Color.accent : (ipv6Mouse.containsMouse ? Commons.Color.accent : root.dimColor)
                       font.family: root.contentFontFamily
                       font.pixelSize: Style.font.caption
                     }
@@ -1338,9 +1339,9 @@ Panel {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 iconText: (root.copiedValue !== "" && (root.copiedValue === root.privateIp || root.copiedLabel === "Private IP")) ? Model.checkIcon : Model.copyIcon
-                foreground: (root.copiedValue !== "" && (root.copiedValue === root.privateIp || root.copiedLabel === "Private IP")) ? Color.accent : root.contentForeground
+                foreground: (root.copiedValue !== "" && (root.copiedValue === root.privateIp || root.copiedLabel === "Private IP")) ? Commons.Color.accent : root.contentForeground
                 tooltipText: "Copy Private IP (1)"
-                hoverColor: Color.accent
+                hoverColor: Commons.Color.accent
                 onClicked: root.copyToClipboard(root.privateIp, "Private IP")
               }
             }
@@ -1351,10 +1352,10 @@ Panel {
             implicitHeight: pubTextCol.implicitHeight + Style.space(18)
             radius: Style.cornerRadius
             color: pubMouse.containsMouse
-              ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.12)
+              ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.12)
               : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.05)
             border.width: 1
-            border.color: pubMouse.containsMouse ? Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
+            border.color: pubMouse.containsMouse ? Commons.Color.accent : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.1)
 
             MouseArea {
               id: pubMouse
@@ -1376,7 +1377,7 @@ Panel {
                 text: Model.publicIcon
                 font.family: root.contentFontFamily
                 font.pixelSize: Style.font.title
-                color: Color.accent
+                color: Commons.Color.accent
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
               }
@@ -1429,9 +1430,9 @@ Panel {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 iconText: (root.copiedValue !== "" && (root.copiedValue === root.publicIp || root.copiedLabel === "Public IP")) ? Model.checkIcon : Model.copyIcon
-                foreground: (root.copiedValue !== "" && (root.copiedValue === root.publicIp || root.copiedLabel === "Public IP")) ? Color.accent : root.contentForeground
+                foreground: (root.copiedValue !== "" && (root.copiedValue === root.publicIp || root.copiedLabel === "Public IP")) ? Commons.Color.accent : root.contentForeground
                 tooltipText: "Copy Public IP (2)"
-                hoverColor: Color.accent
+                hoverColor: Commons.Color.accent
                 onClicked: root.copyToClipboard(root.publicIp, "Public IP")
               }
             }
@@ -1480,7 +1481,7 @@ Panel {
                       textFormat: Text.PlainText
                       anchors.verticalCenter: parent.verticalCenter
                       text: (root.gatewayIp || "N/A") + (root.gatewayPing ? (" (" + Model.formatPing(Number(root.gatewayPing)) + ")") : "")
-                      color: gwMouse.containsMouse ? Color.accent : root.contentForeground
+                      color: gwMouse.containsMouse ? Commons.Color.accent : root.contentForeground
                       font.family: root.contentFontFamily
                       font.pixelSize: Style.font.caption
                       font.bold: true
@@ -1491,7 +1492,7 @@ Panel {
                       textFormat: Text.PlainText
                       anchors.verticalCenter: parent.verticalCenter
                       text: (root.copiedValue !== "" && (root.copiedValue === root.gatewayIp || root.copiedLabel === "Gateway")) ? Model.checkIcon : Model.copyIcon
-                      color: (root.copiedValue !== "" && (root.copiedValue === root.gatewayIp || root.copiedLabel === "Gateway")) ? Color.accent : (gwMouse.containsMouse ? Color.accent : root.dimColor)
+                      color: (root.copiedValue !== "" && (root.copiedValue === root.gatewayIp || root.copiedLabel === "Gateway")) ? Commons.Color.accent : (gwMouse.containsMouse ? Commons.Color.accent : root.dimColor)
                       font.family: root.contentFontFamily
                       font.pixelSize: Style.font.caption
                     }
@@ -1530,7 +1531,7 @@ Panel {
                     width: dnsPillRow.implicitWidth + Style.space(10)
                     radius: Style.space(3)
                     color: dnsMouse.containsMouse
-                      ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.14)
+                      ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.14)
                       : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.08)
 
                     Row {
@@ -1552,7 +1553,7 @@ Panel {
                         textFormat: Text.PlainText
                         anchors.verticalCenter: parent.verticalCenter
                         text: isDnsCopied ? Model.checkIcon : Model.copyIcon
-                        color: isDnsCopied ? Color.accent : (dnsMouse.containsMouse ? Color.accent : root.dimColor)
+                        color: isDnsCopied ? Commons.Color.accent : (dnsMouse.containsMouse ? Commons.Color.accent : root.dimColor)
                         font.family: root.contentFontFamily
                         font.pixelSize: Style.font.caption
                       }
@@ -1593,7 +1594,7 @@ Panel {
                 height: Style.space(26)
                 radius: Style.space(4)
                 color: addIfMouse.containsMouse
-                  ? Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.10)
+                  ? Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.10)
                   : Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.04)
 
                 Item {
@@ -1637,7 +1638,7 @@ Panel {
                       textFormat: Text.PlainText
                       anchors.verticalCenter: parent.verticalCenter
                       text: isIfCopied ? Model.checkIcon : Model.copyIcon
-                      color: isIfCopied ? Color.accent : (addIfMouse.containsMouse ? Color.accent : root.dimColor)
+                      color: isIfCopied ? Commons.Color.accent : (addIfMouse.containsMouse ? Commons.Color.accent : root.dimColor)
                       font.family: root.contentFontFamily
                       font.pixelSize: Style.font.caption
                     }
@@ -1743,13 +1744,13 @@ Panel {
             width: parent.width
             height: Style.space(24)
             radius: Style.space(4)
-            color: Qt.rgba(Color.accent.r, Color.accent.g, Color.accent.b, 0.16)
+            color: Qt.rgba(Commons.Color.accent.r, Commons.Color.accent.g, Commons.Color.accent.b, 0.16)
 
             Text {
               textFormat: Text.PlainText
               anchors.centerIn: parent
               text: Model.checkIcon + " Copied " + root.copiedLabel + ": " + root.copiedValue
-              color: Color.accent
+              color: Commons.Color.accent
               font.family: root.contentFontFamily
               font.pixelSize: Style.font.caption
               font.bold: true

@@ -1,5 +1,7 @@
 # Omarchy Network & IP Info (`nertwork.network-info`)
 
+[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/nertwork/omarchy-network-info?utm_source=oss&utm_medium=github&utm_campaign=nertwork%2Fomarchy-network-info&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+
 Unified network intelligence, IP telemetry, and live bandwidth monitor for the Omarchy status bar (`omarchy-shell`).
 
 ![Preview](preview.png)
